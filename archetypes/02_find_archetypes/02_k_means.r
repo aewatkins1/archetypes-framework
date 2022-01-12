@@ -24,22 +24,33 @@ library(FNN)
 rm(list=ls())
 overwrite_rotation <- T
 overwrite_kmeans <- T
-out_subdir <- "v5_interventions_only"
+#out_subdir <- "v5_interventions_only"
 
-root_dir <- ifelse(Sys.getenv("USERPROFILE")=="", Sys.getenv("HOME"))
-base_dir <- file.path(root_dir, "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/")
+root_dir <- Sys.getenv("HOME")
+#base_dir <- file.path(root_dir, "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/")
+base_dir<- file.path(root_dir,'archetypes-framework/archetypes/02_find_archetypes')
 
-out_dir <- file.path(base_dir, "results", out_subdir)
+#overwrite <- F
+out_subdir <- "v4_era5_bounded_transmission"
+
+user <- Sys.getenv("USERNAME")
+project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/IPTi/archetypes/covariates')
+unbounded_cov_dir <- file.path(project_dir, "no_transmission_limits")
+bounded_cov_dir <- file.path(project_dir, "with_transmission_limits")
+
+out_dir <- file.path(unbounded_cov_dir, "results", out_subdir)
 guide <- fread(file.path(out_dir, "instructions.csv"))
 
-cluster_counts <- c(10, 20, 30, 40, 50, 60)
+
+cluster_counts <- c(3,4,5,6,7,8,9,10,11,12,13,14,15,20,25,30)
+#cluster_counts <- c(10, 20, 30, 40, 50, 60)
 
 for (this_continent in unique(guide$continent)){
   
   this_guide <- guide[continent==this_continent]
   
   # temp: itn only
-  this_guide <- this_guide[covariate=="itn_coverage"]
+  #this_guide <- this_guide[covariate=="itn_cov"]
   
   this_cov <- paste(this_guide$covariate, collapse=".")
   print(paste("clustering", this_cov, "for", this_continent))
@@ -48,8 +59,8 @@ for (this_continent in unique(guide$continent)){
   
   this_out_dir <- file.path(out_dir, this_continent, "02_kmeans")
   dir.create(this_out_dir, showWarnings=F, recursive=T)
-  svd_dir <- file.path(this_out_dir, "../01_svd")
-  cov_dir <- file.path(base_dir, "covariates", unique(this_guide$cov_directory), this_continent)
+  svd_dir <- file.path(out_dir, this_continent, "01_svd") #file.path(this_out_dir, "../01_svd")
+  cov_dir <- file.path(project_dir, unique(this_guide$cov_directory), this_continent)
   
   # rotate matrix, if needed
   rotation_fname <- file.path(this_out_dir, "svd_rotations.csv")

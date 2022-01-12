@@ -21,14 +21,20 @@ library(ggplot2)
 rm(list=ls())
 
 theme_set(theme_minimal(base_size = 16))
-root_dir <- ifelse(Sys.getenv("USERPROFILE")=="", Sys.getenv("HOME"))
-base_dir <- file.path(root_dir, 
-                      "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/")
+#root_dir <- ifelse(Sys.getenv("USERPROFILE")=="", Sys.getenv("HOME"))
+root_dir <- Sys.getenv("HOME")
+#base_dir <- file.path(root_dir, "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/")
+base_dir<- file.path(root_dir,'archetypes-framework/archetypes/02_find_archetypes')
 
-overwrite <- F
+overwrite <- T
 out_subdir <- "v4_era5_bounded_transmission"
 
-out_dir <- file.path(base_dir, "results", out_subdir)
+user <- Sys.getenv("USERNAME")
+project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/IPTi/archetypes/covariates')
+unbounded_cov_dir <- file.path(project_dir, "no_transmission_limits")
+bounded_cov_dir <- file.path(project_dir, "with_transmission_limits")
+
+out_dir <- file.path(unbounded_cov_dir, "results", out_subdir)
 guide <- fread(file.path(out_dir, "instructions.csv"))
 
 for (this_continent in unique(guide$continent)){
@@ -36,7 +42,7 @@ for (this_continent in unique(guide$continent)){
   this_guide <- guide[continent==this_continent]
   
   print(paste("running svd on", this_continent))
-  cov_dir <- file.path(base_dir, "covariates", unique(this_guide$cov_directory), this_continent)
+  cov_dir <- file.path(project_dir, unique(this_guide$cov_directory), this_continent)
   
 # test with just ITN for now
   # this_guide <- this_guide[covariate=="itn_coverage"]

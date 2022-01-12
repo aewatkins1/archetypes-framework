@@ -20,37 +20,48 @@ library(ncdf4)
 
 rm(list=ls())
 
-source("extraction_functions.r")
+
+user <- Sys.getenv("USERNAME")
+project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/IPTi/archetypes/covariates')
 
 root_dir <- Sys.getenv("HOME")
-base_dir <- file.path(root_dir, 
-                      "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/covariates")
-in_dir <- file.path(base_dir, "era5_raw_data")
-template <- raster(file.path(in_dir, "MAP_Regions_Pf_5k.tif"))
+map_root_dir <- file.path('C:/Users', user,'Box/NU-malaria-team/data/MAP/mastergrids')
+base_dir<- file.path(root_dir,'archetypes-framework/archetypes/01_extract_covariates')
+
+source(file.path(base_dir,"extraction_functions.r"))
+
+mask_in_dir <- file.path(map_root_dir, "MAP_Regions_Pf_5k.tif")
+
+
+in_dir <- file.path(project_dir, "era5_raw_data")
+template <- raster(mask_in_dir)
 input_files <- list.files(in_dir)[list.files(in_dir) %like% paste0("\\.nc$")]
+
+
+
 
 ### INPUTS: change these as desired #####----------------------------------------------------------------------------------------------------------------------------------
 
 # please make your own output folder to avoid overwriting someone's work
-out_dir <- file.path(base_dir, "example_for_jaline")
+out_dir <- file.path(project_dir, "era5_ext")
 
 # set years_to_keep to NULL if you would like to keep all years
-years_to_keep <- 2014:2015
+years_to_keep <- 2014:2019
 
 # if synoptic==T, take the mean across years. Otherwise save a raster for every year-month
-synoptic <- F
+synoptic <- T
 
 # if resample==T, change the resolution and extent of the rasters to match the "template" object above
-resample <- F
+resample <- T
 
 # if you add any continent other than "global", you must have a raster named "mask.tif" in each 
 # of your output directories. The global raster is cropped and masked to the "mask" file. 
-continents_to_keep <- c("global")
+continents_to_keep <- c("africa")
 
 # NOT RECOMMENDED IF SYNOPTIC==F: writes a big file
 # if save_to_csv==T, all the values in the rasters will also be saved as a .csv in long format, 
 # one per input file, where "id" refers to the cell number to which that value corresponds
-save_to_csv <- F
+save_to_csv <- T
 
 ### Main extraction loop #####----------------------------------------------------------------------------------------------------------------------------------
 

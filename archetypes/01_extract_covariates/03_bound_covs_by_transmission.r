@@ -12,6 +12,7 @@
 # https://paper.dropbox.com/doc/Cluster-MAP-pixels-by-seasonality-zga4UM1DnBx8pc11rStOS
 ## -----------------------------------------------------------------------------------------------------------------------
 
+library(raster)
 library(gdistance)
 library(data.table)
 library(stringr)
@@ -20,7 +21,7 @@ library(rasterVis)
 
 rm(list=ls())
 
-source("extraction_functions.r")
+#source("extraction_functions.r")
 
 root_dir <- Sys.getenv("HOME")
 # map_root_dir <- "/Volumes/map_data/mastergrids"
@@ -30,15 +31,20 @@ root_dir <- Sys.getenv("HOME")
 # }
 
 # rewrite if there's already a saved covariate extraction?
-overwrite_extraction <- T
+overwrite_extraction <- F
 
-base_dir <- file.path(root_dir, 
-                      "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/covariates")
-unbounded_cov_dir <- file.path(base_dir, "no_transmission_limits")
-bounded_cov_dir <- file.path(base_dir, "with_transmission_limits")
+#base_dir <- file.path(root_dir, 
+#                      "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/covariates")
+base_dir<- file.path(root_dir,'archetypes-framework/archetypes/01_extract_covariates')
+source(file.path(base_dir,"extraction_functions.r"))
+
+user <- Sys.getenv("USERNAME")
+project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/IPTi/archetypes/covariates')
+unbounded_cov_dir <- file.path(project_dir, "no_transmission_limits")
+bounded_cov_dir <- file.path(project_dir, "with_transmission_limits")
 
 # transmission_limit_dir <- file.path(map_root_dir, "../GBD2017/Processing/Spatial_Data/Static_Limits", "Pf_Limits_EnvironmentalOnly_Endemic2017Only_5k.tif")
-transmission_limit_dir <- file.path(bounded_cov_dir, "from_GBD2017_Pf_Limits_EnvironmentalOnly_Endemic2017Only_5k.tif")
+transmission_limit_dir <- file.path(project_dir, "PfPR/Raster_Data/PfPR_rmean/2020_GBD2019_Global_PfPR_2019.tif")
 transmission_limits <- raster(transmission_limit_dir)
 
 continents <- list.dirs(unbounded_cov_dir, recursive = F, full.names = F)
@@ -87,7 +93,7 @@ for (continent in continents){
       these_cov_fnames <- all_cov_fnames[all_cov_fnames %like% this_cov & all_cov_fnames %like% "tif"]
       
       this_cov_stack <- stack(file.path(this_unbounded_cov_dir, these_cov_fnames))
-      cropped_layers <- crop_raster(this_cov_stack, mask = bounded_mask, 
+      cropped_layers <- crop_raster(full_raster = this_cov_stack, mask = bounded_mask, 
                                     out_fname = file.path(this_bounded_cov_dir, paste0(names(this_cov_stack), ".tif"))
                                     )
       
@@ -107,3 +113,8 @@ for (continent in continents){
 }
 
 
+plot(raster(file.path(bounded_cov_dir,'africa/temp/temp_month_01.tif')))
+
+plot(raster(file.path(bounded_cov_dir,'africa/rain/rain_month_09.tif')))
+
+plot(raster(file.path(bounded_cov_dir,'africa/itn_cov/itn_cov_year_2019.tif')))

@@ -25,17 +25,27 @@ theme_set(theme_minimal(base_size = 12))
 
 rm(list=ls())
 
-plot_vectors <- T
-out_subdir <- "v5_interventions_only"
+plot_vectors <- F
+#out_subdir <- "v5_interventions_only"
 
-root_dir <- ifelse(Sys.getenv("USERPROFILE")=="", Sys.getenv("HOME"))
-base_dir <- file.path(root_dir, "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/")
 
-out_dir <- file.path(base_dir, "results", out_subdir)
+root_dir <- Sys.getenv("HOME")
+#base_dir <- file.path(root_dir, "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/")
+base_dir<- file.path(root_dir,'archetypes-framework/archetypes/02_find_archetypes')
+
+#overwrite <- F
+out_subdir <- "v4_era5_bounded_transmission"
+
+user <- Sys.getenv("USERNAME")
+project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/IPTi/archetypes/covariates')
+unbounded_cov_dir <- file.path(project_dir, "no_transmission_limits")
+bounded_cov_dir <- file.path(project_dir, "with_transmission_limits")
+
+out_dir <- file.path(unbounded_cov_dir, "results", out_subdir)
 guide <- fread(file.path(out_dir, "instructions.csv"))
 
 # temp
-guide <- guide[covariate=="itn_coverage"]
+#guide <- guide[covariate=="itn_coverage"]
 
 palette <- c("#98B548", "#00A08A", "#8971B3", "#F2AD00", "#5392C2", "#D71B5A", "#902E57", "#F98400", "#B33539", "#367A40")
 

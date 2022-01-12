@@ -21,10 +21,14 @@ get_mask <- function(continent, in_fname, out_fname){
                     'americas'=2,
                     'asia'=3)
   mask <- raster(in_fname)
+  # mask1 <- crop(mask1,extent(-25,53,-30,30))
   mask[mask!=mask_vals[[continent]]] <- NA
+  #mask1[mask1==0] <- NA
   clipped_mask <- trim(mask)
   writeRaster(clipped_mask, out_fname, overwrite=T)
+  #writeRaster(mask1, out_fname, overwrite=T)
   return(clipped_mask)
+  #return(mask1)
 }
 
 crop_raster <- function(full_raster, mask, out_fname=NULL){
@@ -47,6 +51,14 @@ align_res <- function(rast, template.rast){
     rast  <- raster::resample(rast, template.rast, method = 'ngb')
   }
   return(rast)
+}
+
+save_raster <- function(full_raster, mask, out_fname){
+  r1<-crop(full_raster,mask)
+  m1<-crop(mask,r1)
+  ms<-resample(r1,m1)
+  frm<-mask(r1,ms)
+  writeRaster(frm, out_fname, overwrite=T)
 }
 
 

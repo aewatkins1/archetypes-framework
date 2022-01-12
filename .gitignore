@@ -3,3 +3,4 @@ __pycache__*
 /**/*.Rhistory*
 .DS_Store*
 COMPS_log.log
+.Rproj.user

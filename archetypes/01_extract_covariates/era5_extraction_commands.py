@@ -32,12 +32,12 @@ c.retrieve(
         ],
         'time':'00:00'
     },
-    'download.nc')
+    'temp.nc')
 
 
 # for rainfall: 
 
-    import cdsapi
+import cdsapi
 
 c = cdsapi.Client()
 
@@ -64,4 +64,4 @@ c.retrieve(
         'time':'00:00',
         'format':'netcdf'
     },
-    'download.nc')
+    'rain.nc')
