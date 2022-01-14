@@ -57,7 +57,8 @@ save_raster <- function(full_raster, mask, out_fname){
   r1<-crop(full_raster,mask)
   m1<-crop(mask,r1)
   ms<-resample(r1,m1)
-  frm<-mask(r1,ms)
+  #frm<-mask(r1,ms)
+  frm<-mask(ms,m1)
   writeRaster(frm, out_fname, overwrite=T)
 }
 

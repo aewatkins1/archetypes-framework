@@ -144,9 +144,10 @@ for (idx in 1:nrow(cov_details)){
 
 }
 
-plot(raster(file.path(project_dir,'no_transmission_limits/africa/pop_u1_f/pop_u1_f_year_2019.tif')))
-
-plot(raster(file.path(project_dir,'global_f_0_2019_1km.tif')))
-
-test_df<-fread(file.path(project_dir,'africa/pop_u1_f/pop_u1_f_vals.csv'),)
+# plot(raster(file.path(project_dir,'no_transmission_limits/africa/pop_u1_f/pop_u1_f_year_2019.tif')))
+# full_raster<-raster(file.path(project_dir,'no_transmission_limits/africa/pop_u1_f/pop_u1_f_year_2019.tif'))
+# 
+# plot(raster(file.path(project_dir,'global_f_0_2019_1km.tif')))
+# 
+# test_df<-fread(file.path(project_dir,'africa/pop_u1_f/pop_u1_f_vals.csv'),)
                
