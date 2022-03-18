@@ -31,7 +31,7 @@ root_dir <- Sys.getenv("HOME")
 # }
 
 # rewrite if there's already a saved covariate extraction?
-overwrite_extraction <- F
+overwrite_extraction <- T
 
 #base_dir <- file.path(root_dir, 
 #                      "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/covariates")
@@ -39,7 +39,7 @@ base_dir<- file.path(root_dir,'archetypes-framework/archetypes/01_extract_covari
 source(file.path(base_dir,"extraction_functions.r"))
 
 user <- Sys.getenv("USERNAME")
-project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/IPTi/archetypes/covariates')
+project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/archetypes/covariates')
 unbounded_cov_dir <- file.path(project_dir, "no_transmission_limits")
 bounded_cov_dir <- file.path(project_dir, "with_transmission_limits")
 
@@ -103,6 +103,15 @@ for (continent in continents){
                          id=1:nrow(vals))
       vals <- vals[complete.cases(vals)]
       vals <- unbounded_extraction_vals[id %in% unique(vals$id)]
+      
+      # vals <- getValues(cropped_layers)
+      # vals <- data.table(cov = this_cov_details$cov,
+      #                    variable_name = this_cov_details$variable_label,
+      #                    variable_val = this_variable, 
+      #                    id = which(!is.na(vals)),
+      #                    value = vals[!is.na(vals)])
+      
+      # return(vals)
       
       print("saving extracted values")
       write.csv(vals, file=bounded_extraction_fname, row.names=F)

@@ -1,16 +1,3 @@
-## -----------------------------------------------------------------------------------------------------------------
-# Seasonality Classification
-# 01_extract_map_covariates.r
-# 
-# Amelia Bertozzi-Villa, Institute for Disease Modeling, University of Oxford
-# September 2019
-# 
-# For a given covariate and continent of interest, this script extracts covariate-specific
-# data from global rasters, transforms it into a panel dataset, and saves it for further clustering analyses.  
-# 
-# For a detailed project write-up see
-# https://paper.dropbox.com/doc/Cluster-MAP-pixels-by-seasonality-zga4UM1DnBx8pc11rStOS
-## -----------------------------------------------------------------------------------------------------------------------
 
 library(gdistance)
 library(data.table)
@@ -35,7 +22,7 @@ if (!dir.exists(map_root_dir)){
 
 
 # rewrite if there's already a saved covariate extraction?
-overwrite_extraction <- F
+overwrite_extraction <- T
 
 # base_dir <- file.path(root_dir, 
 #                       "Dropbox (IDM)/Malaria Team Folder/projects/map_intervention_impact/archetypes/covariates/no_transmission_limits")
@@ -53,7 +40,7 @@ for (idx in 1:nrow(cov_details)){
   
   this_cov_details <- cov_details[idx]
   continents <- strsplit(this_cov_details$continents, "/")[[1]]
-
+  
   # append appropriate root dir to directories
   this_cov_details$dir <- file.path(project_dir, this_cov_details$dir)
   
@@ -61,7 +48,7 @@ for (idx in 1:nrow(cov_details)){
     
     print(paste("running extraction for", this_cov_details$cov, "in", continent))
     
-    this_out_dir <- file.path(project_dir, 'no_transmission_limits', continent, this_cov_details$cov)
+    this_out_dir <- file.path(project_dir, 'with_transmission_limits', continent, this_cov_details$cov)
     dir.create(this_out_dir, showWarnings=F, recursive=T)
     extraction_fname <- file.path(this_out_dir, paste0(this_cov_details$cov, "_vals.csv"))
     
@@ -71,7 +58,7 @@ for (idx in 1:nrow(cov_details)){
     }else{
       
       # check for mask
-      clipped_mask_fname <- file.path(project_dir, 'no_transmission_limits', continent, "mask.tif")
+      clipped_mask_fname <- file.path(project_dir, 'with_transmission_limits', continent, "bounded_mask.tif")
       if (file.exists(clipped_mask_fname)){
         print("loading saved mask")
         mask_raster <- raster(clipped_mask_fname)
@@ -122,7 +109,7 @@ for (idx in 1:nrow(cov_details)){
           print("clipping global raster")
           val_raster <- save_raster(full_raster=raster(file.path(this_cov_details$dir, in_fname)), mask = mask_raster, out_fname=out_fname)
         }
-      
+        
         vals <- getValues(val_raster)
         vals <- data.table(cov = this_cov_details$cov,
                            variable_name = this_cov_details$variable_label,
@@ -131,7 +118,7 @@ for (idx in 1:nrow(cov_details)){
                            value = vals[!is.na(vals)])
         
         return(vals)
-      
+        
       })
       
       all_vals <- rbindlist(all_vals)
@@ -141,13 +128,5 @@ for (idx in 1:nrow(cov_details)){
     }
     
   }
-
+  
 }
-
-# plot(raster(file.path(project_dir,'no_transmission_limits/africa/pop_u1_f/pop_u1_f_year_2019.tif')))
-# full_raster<-raster(file.path(project_dir,'no_transmission_limits/africa/pop_u1_f/pop_u1_f_year_2019.tif'))
-# 
-# plot(raster(file.path(project_dir,'global_f_0_2019_1km.tif')))
-# 
-# test_df<-fread(file.path(project_dir,'africa/pop_u1_f/pop_u1_f_vals.csv'),)
-               

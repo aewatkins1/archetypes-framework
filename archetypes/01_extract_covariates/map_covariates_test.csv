@@ -1,5 +1,5 @@
 cov,dir,variable_label,variables,continents,pattern
-pop_u1_f,./,year,2019/,africa,global_f_0_VAR_1km.tif$
+pop_u1_f,./,year,2019/2020,africa,global_f_0_VAR_1km.tif$
 itn_cov,./,year,2017/2018/2019,africa,2020_GBD2021_Africa_ITN_Coverage_VAR.tif$
 rain,./era5_ext/africa/rain,month,01/02/03/04/05/06/07/08/09/10/11/12,africa,rain_month_VAR.tif$
 temp,./era5_ext/africa/temp,month,01/02/03/04/05/06/07/08/09/10/11/12,africa,temp_month_VAR.tif$

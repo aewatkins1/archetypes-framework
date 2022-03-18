@@ -30,11 +30,12 @@ overwrite <- T
 out_subdir <- "v4_era5_bounded_transmission"
 
 user <- Sys.getenv("USERNAME")
-project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/IPTi/archetypes/covariates')
+project_dir <- file.path('C:/Users', user, 'Box/NU-malaria-team/projects/archetypes/covariates')
 unbounded_cov_dir <- file.path(project_dir, "no_transmission_limits")
 bounded_cov_dir <- file.path(project_dir, "with_transmission_limits")
 
-out_dir <- file.path(unbounded_cov_dir, "results", out_subdir)
+#out_dir <- file.path(unbounded_cov_dir, "results", out_subdir)
+out_dir <- file.path(bounded_cov_dir, "results", out_subdir)
 guide <- fread(file.path(out_dir, "instructions.csv"))
 
 for (this_continent in unique(guide$continent)){
